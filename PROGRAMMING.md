@@ -23,4 +23,4 @@ print ; utility function to print to console
 
 ### compiling and running
 
-you can either run `python3 compile.py (PROGRAM_NAME)` to get a `.atm` file, or you can run the `.atms` directly.
+you can either run `python3 assemble.py (PROGRAM_NAME)` to get a `.atm` file, or you can run the `.atms` directly with `antromo.py`.
