@@ -1,7 +1,7 @@
 # antromo
 goofy ahh fantasy computer
 
- [specs](SPECS.md) | [CPU](CPU.md) | [programming](PROGRAMMING.md) | [RAM]("RAM.md")
+ [specs](SPECS.md) | [CPU](CPU.md) | [programming](PROGRAMMING.md) | [RAM](RAM.md)
 
 ### why though
 for fun :D
