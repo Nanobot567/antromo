@@ -1,0 +1,11 @@
+; simple timer program
+; counts to 255 and then stops
+
+srg 0       ; set 0 register
+inc         ; increment
+crg 255     ; compare reg 0 to 255
+jne 0       ; if not equal, loop
+ldr 0       ; set to 0
+srg 1
+ldr "Timer"
+print       ; print "timer"

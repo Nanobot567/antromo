@@ -1,0 +1,18 @@
+; gathers keypresses and displays on the screen. exits on q.
+
+srg 0       ; set register to 0
+
+ldr #25     ; load keyboard RAM address into register 0
+
+cmp #25,0   ; check if no keys are pressed..
+jeq 0       ; ..and if none are pressed, loop
+
+cmp #25,'q' ; see if key is q
+jeq 99      ; if it is, end program
+
+cmp #0,#25  ; check if value is the same as before
+jeq 0       ; if it is, then jmp to top
+
+print       ; otherwise, print key
+mov 0,#25   ; set last printed character
+jmp 0       ; and loop

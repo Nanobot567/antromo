@@ -1,0 +1,8 @@
+; basic add to register
+
+mov 0,'A' ; move value of character A - 1 into addr 0
+srg 0     ; current register is 0
+ldr #0    ; load value at addr 5
+print     ; display
+inc       ; add 1 to register 0
+print     ; display
