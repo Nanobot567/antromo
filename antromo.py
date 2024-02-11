@@ -1,3 +1,5 @@
+#! /bin/python3
+
 # antromo fantasy computer
 
 from pynput import keyboard

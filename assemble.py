@@ -1,3 +1,5 @@
+#! /bin/python3
+
 # antromo assembler
 
 from sys import argv
@@ -18,6 +20,8 @@ def argParse(arg=""):
 
     # the starting byte is the type identifier. instead of making every op a seperate instruction, why not just one extra type byte :)
     # add hexadecimal number mode
+
+    # figure out a way to write to large RAM addresses
 
     if origarg.startswith("#"):
         arg = b"\x01" + int(arg.strip("#")).to_bytes()
