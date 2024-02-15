@@ -57,7 +57,7 @@ def getArg(): # rename?
                 toset = 0
         elif formatByte == 2: # ?
             string = b""
-                
+
             curSearchByte = 2
             while data[byteIndex+curSearchByte] != 0:
                 string += data[byteIndex+curSearchByte].to_bytes()
@@ -107,7 +107,6 @@ while byteIndex < len(data):
         pass
 
     # print(byteIndex, opcode)
-
     # input()
 
     if opcode == "MOV":
@@ -190,15 +189,33 @@ while byteIndex < len(data):
         pass
     elif opcode == "NOT":
         pass
+    elif opcode == "CALL":
+        arg = getArg()
+
+        subroutineStack.append(byteIndex)
+
+        byteIndex = arg
+
+    elif opcode == "CBS":
+        arg = getArg()
+
+        if arg == 80:
+            try:
+                stdout.write(registers[currentRegister].decode("utf-8"))
+            except AttributeError: # register is int
+                stdout.write(chr(registers[currentRegister]))
+
+            stdout.flush()
 
     elif opcode == "PRINT":
-        try:
-            stdout.write(registers[currentRegister].decode("utf-8"))
-        except AttributeError: # register is int
-            stdout.write(chr(registers[currentRegister]))
-
-        stdout.flush()
+        pass
         
+    elif opcode == "RET":
+        try:
+            byteIndex = subroutineStack.pop()
+        except Exception as e:
+            pass
+            
     elif opcode == "HALT":
         stdout.flush()
         break

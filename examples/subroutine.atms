@@ -1,0 +1,14 @@
+; subroutines example
+
+srg 0
+ldr "jmp\n"
+cbs 'P'
+call *subroutine
+ldr "back"
+cbs 'P'
+halt
+
+func subroutine
+  ldr "sub!\n"
+  cbs 'P'
+  ret

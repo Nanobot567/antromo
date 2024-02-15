@@ -13,6 +13,6 @@ jeq 99      ; if it is, end program
 cmp #0,#25  ; check if value is the same as before
 jeq 0       ; if it is, then jmp to top
 
-print       ; otherwise, print key
+cbs 'P'     ; otherwise, print key
 mov 0,#25   ; set last printed character
 jmp 0       ; and loop

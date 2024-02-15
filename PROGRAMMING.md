@@ -19,6 +19,7 @@ print ; utility function to print to console
 - binary values are signified by the `%` prefix.
 - char values are surrounded by single quotes `'`
 - string values are possible when storing to registers, signified by double quotes `"`
+- when calling a subroutine, you must prefix the name of the subroutine with `*`
 - `;` is the comment signifier
 
 ### compiling and running

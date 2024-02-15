@@ -28,7 +28,8 @@ OPCODES = [
     "NOT",   # not
     "BIT",   # not standard BIT instruction, checks if a bit is one.
     "CALL",  # call subroutine (probably line number?)
+    "CBS",   # call built-in subroutine
     "PRINT", # print to screen helper sub. prints from register passed into it.
-    "RST",   # return
+    "RET",   # return
     "HALT"   # halt program
 ]

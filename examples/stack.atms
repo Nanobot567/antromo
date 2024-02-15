@@ -3,11 +3,14 @@
 srg 0     ; set register = 0
 push '\n' ; push to stack
 push 'A'  ; push to stack
-pop 0     ; pops to register 0
-print
-pop 0
-print
+call *print
+call *print
 
 push "Hello world"  ; push string value to stack
-pop 0
-print
+call *print
+halt
+
+func print
+  pop 0
+  cbs 'P'
+  ret

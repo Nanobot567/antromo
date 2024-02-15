@@ -37,6 +37,6 @@ ordered by opcode number.
 | NOT                   | 1         | NOT current register with value                     |
 | BIT                   | 1         | if argument bit in byte is 1, sets cmp value 1 to 1 |
 | CALL                  | 1         | call subroutine                                     |
-| PRINT                 | 0         | print current register value to console             |
-| RST                   | 0         | return from subroutine                              |
+| CBS                   | 1         | call built-in subroutine                            |
+| RET                   | 0         | return from subroutine                              |
 | HALT                  | 0         | halt program                                        |
