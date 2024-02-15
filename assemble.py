@@ -79,6 +79,11 @@ def compileASM(data):
     return output
 
 if __name__ == "__main__":
+    if not len(argv) == 2:
+        print("usage: %s [file]" % (argv[0]))
+        exit(0)
+
+
     f = open(argv[1], "r")
 
     data = f.read()

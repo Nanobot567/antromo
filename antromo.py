@@ -8,6 +8,10 @@ from sys import argv, stdout
 from consts import OPCODES
 from assemble import compileASM
 
+if not len(argv) == 2:
+    print("usage: %s [file]" % (argv[0]))
+    exit(1)
+
 f = open(argv[1], "rb")
 
 if argv[1].endswith(".atms"):
