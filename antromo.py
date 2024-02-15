@@ -9,6 +9,14 @@ from os import path
 from consts import OPCODES
 from assemble import compileASM
 
+
+class AntromoException(BaseException):
+    def __init__(self, err):
+        self.err = err
+
+    def __str__(self):
+        return self.err
+
 if not len(argv) == 2:
     print("usage: %s [file]" % (argv[0]))
     exit(1)
@@ -25,11 +33,14 @@ if argv[1].endswith(".atms"):
 else:
     data = f.read()
 
+if not data.startswith(b"ATM"):
+    raise AntromoException("not a valid antromo binary file")
+
 f.close()
 
 cmpVal = 0
 cmpVal2 = 0
-byteIndex = 0
+byteIndex = 3
 currentKeyCode = 0
 
 registers = []
@@ -43,7 +54,7 @@ randomAccessMemory = []
 stack = []
 subroutineStack = []
 
-for i in range(2^16): # 64 KB
+for i in range(256): # 64 KB?
     randomAccessMemory.append(0x0)
 
 
@@ -92,14 +103,20 @@ def keypress(key):
     except AttributeError:
         pass
 
-    randomAccessMemory[25] = currentKeyCode
+    try:
+        randomAccessMemory[25] = currentKeyCode
+    except IndexError:
+        pass # weird index error for no reason
     
 def keyrelease(key):
     global currentKeyCode, randomAccessMemory
 
     currentKeyCode = 0
 
-    randomAccessMemory[25] = 0
+    try:
+        randomAccessMemory[25] = 0
+    except IndexError:
+        pass # weird index error for no reason
 
 listener = keyboard.Listener(
     suppress=True,
@@ -208,10 +225,13 @@ while byteIndex < len(data):
     elif opcode == "CBS":
         arg = getArg()
 
-        if arg == 80:
+        if arg == 67:
+            stdout.write("\033c\033[3J") # clears screen
+            stdout.flush()
+        elif arg == 80:
             try:
                 stdout.write(registers[currentRegister].decode("utf-8"))
-            except AttributeError: # register is int
+            except AttributeError: # register is int?
                 stdout.write(chr(registers[currentRegister]))
 
             stdout.flush()

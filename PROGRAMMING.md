@@ -14,7 +14,7 @@ cbs 'P' ; utility function to print to console
 
 ### assembler
 
-- arguments in opcodes are separated by commas `,`
+- arguments in opcodes are separated by commas `,` (if you would like to use the comma character, escape it with `\`.)
 - pointers to RAM addresses are signified by the `#` prefix.
 - binary values are signified by the `%` prefix.
 - char values are surrounded by single quotes `'`

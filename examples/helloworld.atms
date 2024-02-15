@@ -1,0 +1,5 @@
+; hello world
+
+srg 0 ; sets register to 0
+ldr "Hello\, world!" ; sets register 0 to "Hello, world!"
+cbs 'P' ; utility function to print to console

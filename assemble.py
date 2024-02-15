@@ -2,6 +2,7 @@
 
 # antromo assembler
 
+import re
 from sys import argv
 import shlex
 from os import path
@@ -53,8 +54,8 @@ args = []
 functions = {}
 
 def compileASM(data):
-    output = b""
-    byteCount = 0
+    output = b"ATM"
+    byteCount = 3
 
     for index, line in enumerate(data.splitlines()):
         line = line.strip()
@@ -65,7 +66,9 @@ def compileASM(data):
                 opcode = line.split(" ")[0].upper()
                 
                 try:
-                    args = shlex.split(line, posix=False)[1].split(",")
+                    args = re.split(r'(?<!\\),', shlex.split(line, posix=False)[1])
+                    for i,v in enumerate(args):
+                        args[i] = v.replace("\\,",",")
                 except IndexError:
                     args = []
 
@@ -83,7 +86,7 @@ def compileASM(data):
                         byteCount += len(arg1)+len(arg2)+1
                     elif opcode in ["SRG","SWR","MVR","CRG","PUSH","POP","JMP","JEQ","JNE","ADD","SUB","MUL","STR","LDR","CALL","CBS"]: # one arg
                         arg1 = argParse(args[0])
-                        if opcode == "CALL":
+                        if str(arg1).startswith("*"):
                             arg1 = arg1.strip("*")
                             if arg1 in functions.keys():
                                 output += b"\x00"+functions[arg1].to_bytes()
@@ -94,12 +97,11 @@ def compileASM(data):
                         else:
                             output += arg1
                             byteCount += len(arg1)+1
-                    elif opcode in ["NOP", "INC", "DEC", "PRINT", "RET", "HALT"]:
+                    elif opcode in ["NOP", "INC", "DEC", "RET", "HALT"]:
                         # f.write(argParse(args[0]))
                         byteCount += 1
 
             except ValueError as e:
-                print(e)
                 print(f"invalid instruction on line {index}: {opcode}")
                 return
 
