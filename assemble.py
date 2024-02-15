@@ -4,6 +4,7 @@
 
 from sys import argv
 import shlex
+from os import path
 
 from consts import OPCODES
 
@@ -81,8 +82,11 @@ def compileASM(data):
 if __name__ == "__main__":
     if not len(argv) == 2:
         print("usage: %s [file]" % (argv[0]))
-        exit(0)
+        exit(1)
 
+    if not path.exists(argv[1]):
+        print("error: no such file or directory: '%s'" % (argv[1]))
+        exit(1)
 
     f = open(argv[1], "r")
 

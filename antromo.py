@@ -4,12 +4,17 @@
 
 from pynput import keyboard
 from sys import argv, stdout
+from os import path
 
 from consts import OPCODES
 from assemble import compileASM
 
 if not len(argv) == 2:
     print("usage: %s [file]" % (argv[0]))
+    exit(1)
+
+if not path.exists(argv[1]):
+    print("error: no such file or directory: '%s'" % (argv[1]))
     exit(1)
 
 f = open(argv[1], "rb")
