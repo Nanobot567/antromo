@@ -8,7 +8,7 @@ ldr "back"
 cbs 'P'
 halt
 
-func subroutine
+lbl subroutine
   ldr "sub!\n"
   cbs 'P'
   ret

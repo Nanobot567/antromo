@@ -9,7 +9,7 @@ here is a simple "hello world" in antromo assembly.
 
 srg 0  ; sets register to 0
 ldr "Hello world!\n"  ; sets register 0 to "Hello world\n"
-print ; utility function to print to console
+cbs 'P' ; utility function to print to console
 ```
 
 ### assembler
@@ -19,8 +19,20 @@ print ; utility function to print to console
 - binary values are signified by the `%` prefix.
 - char values are surrounded by single quotes `'`
 - string values are possible when storing to registers, signified by double quotes `"`
-- when calling a subroutine, you must prefix the name of the subroutine with `*`
+- if you would like to refer to the location of a subroutine, prefix it with an asterisk `*`
 - `;` is the comment signifier
+
+you can define labels with the `lbl` keyword.
+
+```
+srg 0
+ldr "Hello world"
+call print*
+
+lbl print
+    cbs 'P'
+    ret
+```
 
 ### compiling and running
 

@@ -10,7 +10,7 @@ push "Hello world"  ; push string value to stack
 call *print
 halt
 
-func print
+lbl print
   pop 0
   cbs 'P'
   ret

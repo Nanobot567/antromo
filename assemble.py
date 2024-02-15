@@ -69,7 +69,7 @@ def compileASM(data):
                 except IndexError:
                     args = []
 
-                if opcode == "FUNC":
+                if opcode == "LBL":
                     name = line.split(" ")[1]
                     functions[name] = byteCount-1
                 else:
