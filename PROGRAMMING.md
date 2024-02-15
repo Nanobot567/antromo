@@ -27,7 +27,7 @@ you can define labels with the `lbl` keyword.
 ```
 srg 0
 ldr "Hello world"
-call print*
+call *print
 
 lbl print
     cbs 'P'
