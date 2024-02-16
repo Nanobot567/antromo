@@ -246,7 +246,7 @@ while byteIndex < len(data):
         if passed == True:
             arg = getArg()
             subroutineStack.append(byteIndex)
-            byteIndex = arg
+            byteIndex = arg-1
 
     elif opcode == "CBS":
         arg = getArg()
@@ -261,9 +261,13 @@ while byteIndex < len(data):
                 stdout.write(chr(registers[currentRegister]))
 
             stdout.flush()
+        elif arg == b"PN": # print numerical value
+            try:
+                stdout.write(str(registers[currentRegister]))
+            except AttributeError: # register is int?
+                stdout.write(registers[currentRegister])
 
-    elif opcode == "PRINT":
-        pass
+            stdout.flush()
         
     elif opcode == "RET":
         try:

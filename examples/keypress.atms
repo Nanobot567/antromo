@@ -2,19 +2,21 @@
 
 cbs 'C' ; clear screen
 srg 0   ; set register to 0
+ldr "Hello\, welcome to the keypress program!\n\nPress 'q' to quit.\n\n"
+cbs 'P'
 
 lbl start
   ldr #25     ; load keyboard RAM address into register 0
 
-  cmp #25,0   ; check if no keys are pressed..
+  crg 0       ; check if no keys are pressed..
   jeq *start  ; ..and if none are pressed, loop
 
-  cmp #25,'q' ; see if key is q
-  jeq 99      ; if it is, end program
+  crg 'q'     ; see if key is q
+  jeq *halt   ; if it is, end program
 
-  cmp #0,#25  ; check if value is the same as before
-  jeq *start  ; if it is, then jmp to top
-
-  cbs 'P'     ; otherwise, print key
-  mov 0,#25   ; set last printed character
+  cbs 'P'     ; print key
+  mov 25,0    ; reset keypress
   jmp *start  ; and loop
+
+lbl halt
+  halt
