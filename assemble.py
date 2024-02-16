@@ -84,7 +84,7 @@ def compileASM(data):
                         output += arg1
                         output += arg2
                         byteCount += len(arg1)+len(arg2)+1
-                    elif opcode in ["SRG","SWR","MVR","CRG","PUSH","POP","JMP","JEQ","JNE","ADD","SUB","MUL","STR","LDR","CALL","CBS"]: # one arg
+                    elif opcode in ["SRG","SWR","MVR","CRG","PUSH","POP","JMP","JEQ","JNE","ADD","SUB","MUL","STR","LDR","CALL","CLEQ","CLNE","CLMT","CLME","CLLT","CLLE","CBS"]: # one arg
                         arg1 = argParse(args[0])
                         if str(arg1).startswith("*"):
                             arg1 = arg1.strip("*")

@@ -116,7 +116,7 @@ def keyrelease(key):
     try:
         randomAccessMemory[25] = 0
     except IndexError:
-        pass # weird index error for no reason
+        pass
 
 listener = keyboard.Listener(
     suppress=True,
@@ -221,6 +221,32 @@ while byteIndex < len(data):
         subroutineStack.append(byteIndex)
 
         byteIndex = arg
+    elif opcode.startswith("CL"):
+        passed = False
+
+        if opcode == "CLEQ":
+            if cmpVal == cmpVal2:
+                passed = True
+        elif opcode == "CLNE":
+            if cmpVal != cmpVal2:
+                passed = True
+        elif opcode == "CLMT":
+            if cmpVal > cmpVal2:
+                passed = True
+        elif opcode == "CLME":
+            if cmpVal >= cmpVal2:
+                passed = True
+        elif opcode == "CLLT":
+            if cmpVal < cmpVal2:
+                passed = True
+        elif opcode == "CLLE":
+            if cmpVal <= cmpVal2:
+                passed = True
+
+        if passed == True:
+            arg = getArg()
+            subroutineStack.append(byteIndex)
+            byteIndex = arg
 
     elif opcode == "CBS":
         arg = getArg()

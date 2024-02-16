@@ -37,6 +37,12 @@ ordered by opcode number.
 | NOT                   | 1         | NOT current register with value                     |
 | BIT                   | 1         | if argument bit in byte is 1, sets cmp value 1 to 1 |
 | CALL                  | 1         | call subroutine                                     |
+| CLEQ                  | 1         | call if cmp values are =                            |
+| CLNE                  | 1         | call if cmp values are !=                           |
+| CLMT                  | 1         | call if cmp value one > cmp value two               |
+| CLME                  | 1         | call if cmp value one >= cmp value two              |
+| CLLT                  | 1         | call if cmp value one < cmp value two               |
+| CLLE                  | 1         | call if cmp value one <= cmp value two              |
 | CBS                   | 1         | call built-in subroutine                            |
 | RET                   | 0         | return from subroutine                              |
 | HALT                  | 0         | halt program                                        |
