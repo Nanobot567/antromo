@@ -9,6 +9,7 @@ from os import path
 from consts import OPCODES
 from assemble import compileASM
 
+debug = False
 
 class AntromoException(BaseException):
     def __init__(self, err):
@@ -17,8 +18,11 @@ class AntromoException(BaseException):
     def __str__(self):
         return self.err
 
-if not len(argv) == 2:
-    print("usage: %s [file]" % (argv[0]))
+
+if len(argv) == 3 and argv[2] == "--debug":
+    debug = True
+elif not len(argv) == 2:
+    print("usage: %s [file] (--debug)" % (argv[0]))
     exit(1)
 
 if not path.exists(argv[1]):
@@ -119,7 +123,7 @@ def keyrelease(key):
         pass
 
 listener = keyboard.Listener(
-    suppress=True,
+    suppress=not debug,
     on_press=keypress,
     on_release=keyrelease)
 listener.start()
@@ -132,8 +136,9 @@ while byteIndex < len(data):
     except IndexError:
         pass
 
-    # print(byteIndex, opcode)
-    # input()
+    if debug:
+        print(byteIndex, opcode)
+        input()
 
     if opcode == "MOV":
         arg1 = getArg()
@@ -217,9 +222,7 @@ while byteIndex < len(data):
         pass
     elif opcode == "CALL":
         arg = getArg()
-
         subroutineStack.append(byteIndex)
-
         byteIndex = arg
     elif opcode.startswith("CL"):
         passed = False
@@ -243,7 +246,7 @@ while byteIndex < len(data):
             if cmpVal <= cmpVal2:
                 passed = True
 
-        if passed == True:
+        if passed:
             arg = getArg()
             subroutineStack.append(byteIndex)
             byteIndex = arg-1

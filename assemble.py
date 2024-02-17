@@ -15,6 +15,7 @@ from consts import OPCODES
 # " " is string
 # none is just number
 
+debug = False
 
 def argParse(arg=""):
     arg = arg.strip()
@@ -28,7 +29,7 @@ def argParse(arg=""):
     if origarg.startswith("#"):
         arg = b"\x01" + int(arg.strip("#")).to_bytes()
     elif origarg.startswith("%"):
-        arg = b"\x00" + int(arg.strip("%"), 2).to_bytes() # probably just make \x02 into \x00
+        arg = b"\x00" + int(arg.strip("%"), 2).to_bytes()
     elif origarg.startswith("'"):
         arg = arg.strip("'")
         arg = arg.replace("\\n","\n")
@@ -53,7 +54,13 @@ args = []
 
 functions = {}
 
+def log(data, name="ASM"):
+    if debug:
+        print(f"[{name}] {data}")
+
 def compileASM(data):
+    log("assembling..")
+
     output = b"ATM"
     byteCount = 3
 
@@ -64,17 +71,22 @@ def compileASM(data):
         if line and not line.strip().startswith(";") and not line.isspace():
             try:
                 opcode = line.split(" ")[0].upper()
+
+                log(f"found opcode {opcode}!")
+                log(f"line {index}")
                 
                 try:
                     args = re.split(r'(?<!\\),', shlex.split(line, posix=False)[1])
                     for i,v in enumerate(args):
                         args[i] = v.replace("\\,",",")
+                    log(f"args: {args}")
                 except IndexError:
                     args = []
 
                 if opcode == "LBL":
                     name = line.split(" ")[1]
                     functions[name] = byteCount-1
+                    log(f"found LBL {name} for byte {byteCount-1}")
                 else:
                     output += (OPCODES.index(opcode).to_bytes())
 
@@ -91,9 +103,11 @@ def compileASM(data):
                             if arg1 in functions.keys():
                                 output += b"\x00"+functions[arg1].to_bytes()
                                 byteCount += 3
+                                log("found LBL pointer")
                             else:
                                 output += b"\x00[FUNC "+bytes(arg1, "utf-8")+b"]"
                                 byteCount += 3 # fix differences in calling subroutines in different files
+                                log("found LBL pointer, LBL not found")
                         else:
                             output += arg1
                             byteCount += len(arg1)+1
@@ -111,10 +125,13 @@ def compileASM(data):
     return output
 
 if __name__ == "__main__":
-    if not len(argv) == 2:
-        print("usage: %s [file]" % (argv[0]))
+    if len(argv) == 3 and argv[2] == "-v":
+        debug = True
+        log("verbose mode ON", "ASSEMBLER")
+    elif not len(argv) == 2:
+        print("usage: %s [file] (-v)" % (argv[0]))
         exit(1)
-
+        
     if not path.exists(argv[1]):
         print("error: no such file or directory: '%s'" % (argv[1]))
         exit(1)
