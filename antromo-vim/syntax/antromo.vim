@@ -21,6 +21,8 @@ syntax keyword antromoKeywords
     \ crg   
     \ push
     \ pop
+    \ popa
+    \ pops
     \ jmp
     \ jeq
     \ jne
@@ -49,7 +51,7 @@ syntax keyword antromoKeywords
     \ ret
     \ halt
 
-syn keyword antromoStatement lbl nextgroup=antromoFunction skipwhite
+syn keyword antromoStatement lbl include define nextgroup=antromoFunction skipwhite
 syn match antromoFunction '\%([^[:cntrl:][:space:][:punct:][:digit:]]\|_\)\%([^[:cntrl:][:punct:][:space:]]\|_\)*' display contained
 syn match antromoFunctionCall '\*\%([^[:cntrl:][:space:][:punct:][:digit:]]\|_\)\%([^[:cntrl:][:punct:][:space:]]\|_\)*'
 

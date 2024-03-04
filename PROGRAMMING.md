@@ -34,6 +34,15 @@ lbl print
     ret
 ```
 
+### keyboard input
+
+address `0x25` contains the keycode for the key currently pressed. all keycodes are normal, except for the arrow keys:
+
+- left: `1`
+- up: `2`
+- right: `3`
+- down: `4`
+
 ### compiling and running
 
 you can either run `python3 assemble.py (PROGRAM_NAME)` to get a `.atm` file, or you can run the `.atms` directly with `antromo.py`.

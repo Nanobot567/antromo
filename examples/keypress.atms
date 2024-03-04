@@ -14,9 +14,38 @@ lbl start
   crg 'q'     ; see if key is q
   jeq *halt   ; if it is, end program
 
-  cbs 'P'     ; print key
+  crg 6
+  cleq *printBackspace ; if key is backspace...
+
+  crg 5
+  cleq *printEnter  ; if key is enter...
+
+  cbs 'P'     ; print keycode
+
+  srg 1       ; switch to register 1
+  ldr " - "
+  cbs 'P'     ; print separator
+  srg 0       ; switch back
+  cbs "PN"    ; print numerical value
+
+  ldr "\n"
+  cbs 'P'     ; newline
+  srg 0
+
   mov 25,0    ; reset keypress
   jmp *start  ; and loop
+
+lbl printBackspace
+  ldr "[BACKSPACE]"
+  cbs 'P'  ; print [BACKSPACE]
+  ldr 6  ; reset to keycode
+  ret
+lbl printEnter
+  ldr "[ENTER]"
+  cbs 'P' ; print [ENTER]
+  ldr 5 ; reset to keycode
+  ret
+
 
 lbl halt
   halt

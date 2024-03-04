@@ -1,0 +1,29 @@
+; print stack
+
+push 'D'
+push 'C'
+push 'B'
+push 'A'
+
+lbl printstack
+  srg 0     ; set register to 0
+  cbs "SL"  ; get stack length, put into 0
+  cbs "PN"  ; print number
+
+  crg 0     ; compare register to 0
+  jne *_printstackloop  ; if it's not 0, jump to _printstackloop
+  jmp *halt  ; otherwise, halt
+
+lbl _printstackloop
+  pop 1   ; pop latest value into register 1
+  srg 1   ; set register to 1
+  cbs 'P' ; print value
+  ldr "\n"
+  cbs 'P' ; newline
+  cbs "SL" ; load stack length into 1
+  crg 0 ; compare it to 0
+  jeq *halt  ; if it's 0, halt
+  jmp *printstack ; otherwise, loop
+
+lbl halt
+  halt

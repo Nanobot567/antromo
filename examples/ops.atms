@@ -1,0 +1,52 @@
+; op test
+
+
+; NUMS
+mov 0,24   ; number 1 (perform operation on this)
+mov 1,10   ; number 2
+
+srg 0
+
+ldr #0     ; load number 1
+cbs "PN"   ; print number
+ldr " = "  ; load =
+cbs 'P'    ; print
+ldr #0     ; load number again
+cbs "PB"   ; print binary
+
+ldr "\, "  ; print separator
+cbs 'P'
+
+ldr #1     ; print values for number 2
+cbs "PN"
+ldr " = "
+cbs 'P'
+ldr #1
+cbs "PB"
+ldr "\n\n"
+cbs 'P'
+
+ldr "ANDing... "
+call *printReset
+and #1
+cbs "PB"
+
+ldr "\nORing... "
+call *printReset
+or #1
+cbs "PB"
+
+ldr "\nXORing... "
+call *printReset
+xor #1
+cbs "PB"
+
+ldr "\nNOTing... "
+call *printReset
+not
+cbs "PB"
+
+lbl printReset
+  cbs 'P'
+  ldr #0
+  ret

@@ -19,6 +19,8 @@ ordered by opcode number.
 | CRG                   | 1         | compare current register with value                 |
 | PUSH                  | 1         | push value to stack                                 |
 | POP                   | 1         | pop value from stack and move it to register        |
+| POPA                  | 0         | pop all values from stack                           |
+| POPS                  | 1         | pop first value from stack                          |
 | JMP                   | 1         | general jump                                        |
 | JEQ                   | 1         | jump if cmp values are =                            |
 | JNE                   | 1         | jump if cmp values are !=                           |

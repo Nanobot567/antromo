@@ -10,6 +10,8 @@ OPCODES = [
     "CRG",   # compare current register to value
     "PUSH",  # push value to stack
     "POP",   # pop value from stack, move into register arg
+    "POPA",  # pop all values from stack
+    "POPS",  # pop value from start of stack
     "JMP",   # jump
     "JEQ",   # jump if equal
     "JNE",   # jump not equal

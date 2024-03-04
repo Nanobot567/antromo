@@ -1,0 +1,47 @@
+; simple calculator
+
+srg 1 ; set current number to 0
+ldr 0
+srg 0 ; reset register
+
+lbl main_loop
+  srg 0
+  call *loadkey ; get current key
+
+  cmp #0,1 ; check if waiting for key
+  cleq 
+
+  crg 'q' ; if q
+  jeq *halt ; then halt
+  crg '+' ; if +
+  cleq *setModeAddition ; set addition mode
+  jmp *main_loop
+
+lbl loadkey
+  ldr #25
+  ret
+
+lbl setModeAddition
+  mov 0,1 ; waiting for key
+  mov 1,1 ; mode is now addition
+  srg 1
+  inc
+  cbs "PH"
+  srg 0
+  mov 25,0
+  ret
+
+lbl performAction
+  cmp #1,1 ; check if mode is addition
+  cleq *add
+
+lbl add
+  srg 1
+  inc
+  cbs 'P'
+
+  mov 1,0 ; reset mode
+  mov 0,1 ; no longer waiting
+
+lbl halt
+  halt

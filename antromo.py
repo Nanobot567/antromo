@@ -3,7 +3,7 @@
 # antromo fantasy computer
 
 from pynput import keyboard
-from sys import argv, stdout
+from sys import activate_stack_trampoline, argv, stdout
 from os import path
 
 from consts import OPCODES
@@ -104,8 +104,21 @@ def keypress(key):
 
     try:
         currentKeyCode = key.vk
-    except AttributeError:
-        pass
+    except AttributeError as e:
+        if key == keyboard.Key.left:
+            currentKeyCode = 1
+        elif key == keyboard.Key.up:
+            currentKeyCode = 2
+        elif key == keyboard.Key.right:
+            currentKeyCode = 3
+        elif key == keyboard.Key.down:
+            currentKeyCode = 4
+        elif key == keyboard.Key.space:
+            currentKeyCode = 32
+        elif key == keyboard.Key.enter:
+            currentKeyCode = 5
+        elif key == keyboard.Key.backspace:
+            currentKeyCode = 6
 
     try:
         randomAccessMemory[25] = currentKeyCode
@@ -168,27 +181,31 @@ while byteIndex < len(data):
         stack.append(getArg())
     elif opcode == "POP":
         registers[getArg()] = stack.pop()
+    elif opcode == "POPA":
+        stack = []
+    elif opcode == "POPS":
+        registers[getArg()] = stack.pop(0)
 
     elif opcode == "JMP":
-        byteIndex = getArg()-1
+        byteIndex = getArg() - 1
     elif opcode == "JEQ":
         if cmpVal == cmpVal2:
-            byteIndex = getArg()-1
+            byteIndex = getArg() - 1
     elif opcode == "JNE":
         if cmpVal != cmpVal2:
-            byteIndex = getArg()-1
+            byteIndex = getArg() - 1
     elif opcode == "JMT":
         if cmpVal > cmpVal2:
-            byteIndex = getArg()-1
+            byteIndex = getArg() - 1
     elif opcode == "JME":
         if cmpVal >= cmpVal2:
-            byteIndex = getArg()-1
+            byteIndex = getArg() - 1
     elif opcode == "JLT":
         if cmpVal < cmpVal2:
-            byteIndex = getArg()-1
+            byteIndex = getArg() - 1
     elif opcode == "JLE":
         if cmpVal <= cmpVal2:
-            byteIndex = getArg()-1
+            byteIndex = getArg() - 1
 
 
     elif opcode == "INC":
@@ -213,13 +230,14 @@ while byteIndex < len(data):
         registers[currentRegister] = newval
 
     elif opcode == "AND":
-        pass
+        registers[currentRegister] &= getArg()
     elif opcode == "OR":
-        pass
+        registers[currentRegister] |= getArg()
     elif opcode == "XOR":
-        pass
+        registers[currentRegister] ^= getArg()
     elif opcode == "NOT":
-        pass
+        registers[currentRegister] = (~registers[currentRegister]) * -1
+
     elif opcode == "CALL":
         arg = getArg()
         subroutineStack.append(byteIndex)
@@ -254,10 +272,10 @@ while byteIndex < len(data):
     elif opcode == "CBS":
         arg = getArg()
 
-        if arg == 67:
+        if arg == 67 or arg == b"C":
             stdout.write("\033c\033[3J") # clears screen
             stdout.flush()
-        elif arg == 80:
+        elif arg == 80 or arg == b"P":
             try:
                 stdout.write(registers[currentRegister].decode("utf-8"))
             except AttributeError: # register is int?
@@ -271,6 +289,15 @@ while byteIndex < len(data):
                 stdout.write(registers[currentRegister])
 
             stdout.flush()
+        elif arg == b"PB": # print binary
+            try:
+                stdout.write(bin(registers[currentRegister]))
+            except AttributeError:
+                stdout.write(bin(registers[currentRegister]))
+
+            stdout.flush()
+        elif arg == b"SL": # put stack length into currentRegister
+            registers[currentRegister] = len(stack)
         
     elif opcode == "RET":
         try:

@@ -1,0 +1,16 @@
+lbl printstack
+  srg @IF_REGISTER     ; set register to 2
+  cbs "SL"  ; get stack length, put into 2
+  crg 0     ; compare register 2 to 0
+  jne *_printstackloop  ; if it's not 0, jump to _printstackloop
+
+lbl _printstackloop
+  pops @PRINT_REGISTER   ; pop latest value into register 0
+  srg @PRINT_REGISTER   ; set register to 0
+  cbs 'P' ; print value
+  cbs "SL" ; load stack length into 1
+  crg 0 ; compare it to 0
+  jne *printstack ; loop
+  ldr "\n"
+  cbs 'P' ; newline
+  ret

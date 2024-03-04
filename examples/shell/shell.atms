@@ -1,0 +1,46 @@
+; simple shell
+
+srg 0 ; print stuff register
+
+define SPLASH "atmshell v1.0\n\n"
+define PRINT_REGISTER 0
+define KEY_REGISTER 1
+define IF_REGISTER 50
+
+define KEYCODE_ADDRESS #25
+
+define CURRENT_KEY_RAM_ADDRESS 0
+
+define KEYBOARD_RAM_ADDRESS 0
+
+
+ldr @SPLASH
+cbs 'P'
+
+lbl main
+  srg @KEY_REGISTER
+  ldr @KEYCODE_ADDRESS
+  str @CURRENT_KEY_RAM_ADDRESS
+
+  crg 'q'
+  jeq *halt
+
+  crg 0         ; if there is a key..
+  clne *pushkey ; push to stack
+  crg 5         ; if it's the enter key..
+  cleq *printstack ; print the stack
+
+  jmp *main ; loop
+
+lbl pushkey
+  str @CURRENT_KEY_RAM_ADDRESS
+  push #0
+  srg @KEY_REGISTER
+  mov 25,@KEYBOARD_RAM_ADDRESS
+  cbs 'P'
+  ret
+
+lbl halt
+  halt
+
+include "examples/shell/printstack.atms"

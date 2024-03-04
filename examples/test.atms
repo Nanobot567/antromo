@@ -1,0 +1,13 @@
+; testing program
+
+srg 0
+mov 0,25
+cmp #0,25
+cleq *this
+cbs 'P'
+halt
+
+lbl this
+  ldr "This"
+  cbs 'P'
+  ret

@@ -26,6 +26,11 @@ def argParse(arg=""):
 
     # figure out a way to write to large RAM addresses
 
+    # if origarg.startswith("@") or origarg[1] == "@":
+    #     origarg = origarg.replace("@".join(origarg.split("@")[1:]), origarg.split("@")[0]+variables[origarg.strip("@")])
+
+    # figure out how to replace any variable with @ before with var value
+
     if origarg.startswith("#"):
         arg = b"\x01" + int(arg.strip("#")).to_bytes()
     elif origarg.startswith("%"):
@@ -45,12 +50,15 @@ def argParse(arg=""):
         arg += b"\x00" # null terminator
     elif origarg.startswith("*"):
         return origarg
+    elif origarg.startswith("@"):
+        return variables[origarg.strip("@")]
     else:
         arg = b"\x00" + int(arg).to_bytes()
 
     return arg
 
 args = []
+variables = {}
 
 functions = {}
 
@@ -64,6 +72,18 @@ def compileASM(data):
     output = b"ATM"
     byteCount = 3
 
+    for x in re.finditer(r"include\s+(\S+)", data):
+        try:
+            includefile = open(x.group().split(" ")[1].strip("\""))
+        
+            data = data.replace(x.group(), includefile.read())
+
+            includefile.close()
+        except FileNotFoundError:
+            print(f"ERR: include file not found: {x.group()}")
+            exit(1)
+    
+
     for index, line in enumerate(data.splitlines()):
         line = line.strip()
 
@@ -72,11 +92,17 @@ def compileASM(data):
             try:
                 opcode = line.split(" ")[0].upper()
 
-                log(f"found opcode {opcode}!")
-                log(f"line {index}")
+                log(f"found opcode {opcode} on line {index}")
                 
                 try:
-                    args = re.split(r'(?<!\\),', shlex.split(line, posix=False)[1])
+                    tempargs = []
+                    shlexthing = shlex.split(line, posix=False)
+
+                    for i in shlexthing[1:]:
+                        tempargs += re.split(r'(?<!\\),', i)
+                        
+                    args = tempargs
+
                     for i,v in enumerate(args):
                         args[i] = v.replace("\\,",",")
                     log(f"args: {args}")
@@ -85,18 +111,24 @@ def compileASM(data):
 
                 if opcode == "LBL":
                     name = line.split(" ")[1]
-                    functions[name] = byteCount-1
+                    functions[name] = byteCount
                     log(f"found LBL {name} for byte {byteCount-1}")
+                elif opcode == "DEFINE":
+                    variables[args[0]] = argParse(args[1])
+                    log(f"found DEFINE '{args[0]} = {args[1]}'")
                 else:
                     output += (OPCODES.index(opcode).to_bytes())
 
-                    if opcode in ["MOV", "CMP"]:
+                    if opcode in ["NOP", "POPA", "NOT", "INC", "DEC", "RET", "HALT"]: # no args
+                        # f.write(argParse(args[0]))
+                        byteCount += 1
+                    elif opcode in ["MOV", "CMP"]: # two args
                         arg1 = argParse(args[0])
                         arg2 = argParse(args[1])
                         output += arg1
                         output += arg2
                         byteCount += len(arg1)+len(arg2)+1
-                    elif opcode in ["SRG","SWR","MVR","CRG","PUSH","POP","JMP","JEQ","JNE","ADD","SUB","MUL","STR","LDR","CALL","CLEQ","CLNE","CLMT","CLME","CLLT","CLLE","CBS"]: # one arg
+                    else: # one arg (since these are more common)
                         arg1 = argParse(args[0])
                         if str(arg1).startswith("*"):
                             arg1 = arg1.strip("*")
@@ -111,12 +143,15 @@ def compileASM(data):
                         else:
                             output += arg1
                             byteCount += len(arg1)+1
-                    elif opcode in ["NOP", "INC", "DEC", "RET", "HALT"]:
-                        # f.write(argParse(args[0]))
-                        byteCount += 1
+
+                log(f"moved to byte {byteCount}")
+
 
             except ValueError as e:
                 print(f"invalid instruction on line {index}: {opcode}")
+                return
+            except IndexError as e:
+                print(f"instruction {opcode} takes more than {len(args)} arguments")
                 return
 
     for k in functions.keys():
