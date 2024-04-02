@@ -3,7 +3,7 @@
 # antromo fantasy computer
 
 from pynput import keyboard
-from sys import activate_stack_trampoline, argv, stdout
+from sys import argv, stdout
 from os import path
 
 from consts import OPCODES

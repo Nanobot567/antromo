@@ -22,7 +22,24 @@ cbs 'P' ; utility function to print to console
 - if you would like to refer to the location of a subroutine, prefix it with an asterisk `*`
 - `;` is the comment signifier
 
-you can define labels with the `lbl` keyword.
+files can be included into the current one with `include`:
+
+```
+include "otherfile.atms" ; contains 'ldr "hello!"'
+
+cbs 'P'
+```
+
+constants can be defined with `define` and called with `@`:
+
+```
+define TEXT "hello\, world!!"
+
+ldr @TEXT
+cbs 'P'
+```
+
+labels can be defined with the `lbl` keyword.
 
 ```
 srg 0
