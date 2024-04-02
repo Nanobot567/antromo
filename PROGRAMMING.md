@@ -59,6 +59,9 @@ address `0x25` contains the keycode for the key currently pressed. all keycodes 
 - up: `2`
 - right: `3`
 - down: `4`
+- enter: `5`
+- backspace: `6`
+- space: `32`
 
 ### compiling and running
 
