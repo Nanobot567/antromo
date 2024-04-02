@@ -53,7 +53,7 @@ lbl print
 
 ### keyboard input
 
-address `0x25` contains the keycode for the key currently pressed. all keycodes are normal, except for the arrow keys:
+address `0x25` contains the keycode for the key currently pressed. all keycodes are normal, except for...
 
 - left: `1`
 - up: `2`
