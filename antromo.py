@@ -150,7 +150,7 @@ while byteIndex < len(data):
         pass
 
     if debug:
-        print(byteIndex, opcode)
+        print(byteIndex, f"({hex(byteIndex)})", opcode, f"({data[byteIndex]})")
         input()
 
     if opcode == "MOV":
@@ -241,7 +241,7 @@ while byteIndex < len(data):
     elif opcode == "CALL":
         arg = getArg()
         subroutineStack.append(byteIndex)
-        byteIndex = arg
+        byteIndex = arg-1
     elif opcode.startswith("CL"):
         passed = False
 
